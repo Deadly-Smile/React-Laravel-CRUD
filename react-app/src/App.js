@@ -12,6 +12,8 @@ const App = () => {
   const [nameUpdate, setNameUpdate] = useState("");
   const [emailUpdate, setEmailUpdate] = useState("");
   const [idUpdate, setIdUpdate] = useState(null);
+
+  const [deleteId, setDeleteId] = useState(null);
   let changeTable = 0;
   const baseURL = "http://127.0.0.1:8000/api/users";
 
@@ -69,6 +71,19 @@ const App = () => {
         console.log(error.message);
       });
   };
+
+  const deleteUserById = async (id) => {
+    await axios
+      .delete(`${baseURL}/${id}`)
+      .then((responce) => {
+        console.log(responce);
+        changeTable++;
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   useEffect(() => {
     getUsers();
   }, [changeTable]);
@@ -107,6 +122,9 @@ const App = () => {
   const handleIdChange = (event) => {
     setId(event.target.value);
   };
+  const handleIdDeleteChange = (event) => {
+    setDeleteId(event.target.value);
+  };
   const handleCreateClick = (event) => {
     event.preventDefault();
     createUser();
@@ -137,6 +155,11 @@ const App = () => {
     setIdUpdate(null);
   };
 
+  const handleDeleteClick = (event) => {
+    event.preventDefault();
+    deleteUserById(deleteId);
+    setDeleteId(null);
+  };
   let renderUser = searchedUser ? (
     <div>
       Name:{" "}
@@ -235,6 +258,22 @@ const App = () => {
         <br />
         <button type="submit" onClick={handleUpdateClick}>
           Update
+        </button>
+      </form>
+      <h1>Delete user</h1>
+      <hr />
+      <form>
+        <label>Name : </label>
+        <br />
+        <input
+          type="number"
+          placeholder="Id."
+          onChange={handleIdDeleteChange}
+          value={deleteId}
+        />
+        <br />
+        <button type="submit" onClick={handleDeleteClick}>
+          Search
         </button>
       </form>
     </div>

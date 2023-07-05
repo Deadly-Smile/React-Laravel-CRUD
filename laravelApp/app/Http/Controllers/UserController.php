@@ -50,4 +50,16 @@ class UserController extends Controller
         $user->update($request->all());
         return response()->json($user);
     }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        if (!$user) {
+            return response()->json(["message" => "404 user not found"]);
+        }
+        if (!$user->delete()) {
+            return response()->json(["message" => "Failed to delete"]);
+        }
+        return response()->json(["message" => "Successfully deleted"]);
+    }
 }
